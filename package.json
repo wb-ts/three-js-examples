@@ -1,0 +1,41 @@
+{
+  "name": "three-projected-material",
+  "description": "Material which projects a texture onto an object",
+  "version": "2.1.2",
+  "type": "module",
+  "main": "./build/ProjectedMaterial.js",
+  "module": "./build/ProjectedMaterial.module.js",
+  "types": "./ProjectedMaterial.d.ts",
+  "exports": {
+    ".": {
+      "import": "./build/ProjectedMaterial.module.js",
+      "require": "./build/ProjectedMaterial.js"
+    }
+  },
+  "repository": "git@github.com:wb-ts/three-projected-material.git",
+  "author": "Dennis Lee <dennis94416@gmail.com>",
+  "license": "MIT",
+  "files": [
+    "build/"
+  ],
+  "scripts": {
+    "start": "serve examples/",
+    "build": "rollup -c",
+    "postbuild": "cp build/ProjectedMaterial.module.js examples/lib/"
+  },
+  "peerDependencies": {
+    "three": "*"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.9",
+    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/preset-env": "^7.16.11",
+    "@rollup/plugin-babel": "^5.3.1",
+    "@types/three": "^0.139.0",
+    "eslint-config-accurapp": "^5.1.0",
+    "rollup": "^2.70.2",
+    "serve": "^13.0.2",
+    "stats.js": "^0.17.0",
+    "three": "0.139.2"
+  }
+}
