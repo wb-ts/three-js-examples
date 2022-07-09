@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transparency example - three-projected-material</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+  </head>
+  <body>
+    <canvas id="app"></canvas>
+    <a
+      class="source-fab"
+      target="_blank"
+      href="https://github.com/wb-ts/three-projected-material/blob/master/examples/transparency.html"
+      title="View source code on GitHub"
+    >
+      <img src="images/source.svg" />
+    </a>
+
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.139.2/build/three.module.js"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import * as THREE from 'three'
+      import WebGLApp from './lib/WebGLApp.js'
+      import ProjectedMaterial from './lib/ProjectedMaterial.module.js'
+      import { random } from './lib/math-utils.js'
+
+      // grab our canvas
+      const canvas = document.querySelector('#app')
+
+      // WebGLApp is a really basic wrapper around the three.js setup,
+      // it hides all unnecessary stuff not related to this example
+      const webgl = new WebGLApp({
+        canvas,
+        // set the scene background color
+        background: '#fafafa',
+        // show the fps counter from stats.js
+        showFps: true,
+        // enable orbit-controls
+        orbitControls: true,
+      })
+
+      // attach it to the window to inspect in the console
+      window.webgl = webgl
+
+      // load the texture with transparency
+      const texture = new THREE.TextureLoader().load('./images/three-projected-material-4.png')
+
+      const geometry = new THREE.IcosahedronGeometry(1.3, 5)
+      const material = new ProjectedMaterial({
+        camera: webgl.camera,
+        texture,
+        color: '#59d8e8',
+        textureScale: 0.7,
+        flatShading: true,
+        // works also if the mater is transparent
+        // transparent: true,
+        // opacity: 0.5,
+      })
+      const mesh = new THREE.Mesh(geometry, material)
+
+      // project the texture!
+      material.project(mesh)
+
+      webgl.scene.add(mesh)
+
+      mesh.rotation.y = Math.PI / 2
+      webgl.onUpdate(() => {
+        mesh.rotation.y -= 0.003
+      })
+
+      // add lights
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5)
+      directionalLight.position.set(0, 10, 10)
+      webgl.scene.add(directionalLight)
+
+      const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.2)
+      directionalLight2.position.set(10, 0, -5)
+      webgl.scene.add(directionalLight2)
+
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.6)
+      webgl.scene.add(ambientLight)
+
+      // start animation loop
+      webgl.start()
+    </script>
+  </body>
+</html>
